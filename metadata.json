@@ -1,0 +1,8 @@
+{
+  "name": "Satya Civilization Academy",
+  "description": "A modern, sustainable education platform for Satya Civilization Academy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
