@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut,
+  signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
+  createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword
+} from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -16,6 +23,7 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
+// ... existing google auth ...
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
@@ -37,6 +45,26 @@ export const signInWithGoogle = async () => {
     console.error("Error signing in with Google", error);
     throw error;
   }
+};
+
+export const signInWithEmail = async (email: string, pass: string) => {
+  const result = await firebaseSignInWithEmailAndPassword(auth, email, pass);
+  return result.user;
+};
+
+export const signUpWithEmail = async (email: string, pass: string, displayName: string) => {
+  const result = await firebaseCreateUserWithEmailAndPassword(auth, email, pass);
+  const user = result.user;
+  
+  const userRef = doc(db, 'users', user.uid);
+  await setDoc(userRef, {
+    email: user.email,
+    displayName: displayName,
+    plan: 'Basic', // Default plan
+    createdAt: new Date().toISOString()
+  });
+  
+  return user;
 };
 
 export const logout = async () => {

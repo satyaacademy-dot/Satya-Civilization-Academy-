@@ -3,7 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Programs from './pages/Programs';
+import ProgramDetails from './pages/ProgramDetails';
+import StudyProgramDetails from './pages/StudyProgramDetails';
 
 function ScrollToHash() {
   const location = useLocation();
@@ -36,7 +37,8 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/programs" element={<Programs />} />
+        <Route path="/program/:id" element={<ProgramDetails />} />
+        <Route path="/study/:id" element={<StudyProgramDetails />} />
       </Routes>
       <Footer />
     </div>

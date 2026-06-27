@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Check, Star, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { signInWithGoogle } from '../lib/firebase';
 import PaymentModal from './PaymentModal';
+import AuthModal from './AuthModal';
 import bgImage from '../assets/images/pricing_bg_1782500352275.jpg';
 
 const plans = [
@@ -67,15 +68,12 @@ const plans = [
 export const Pricing = () => {
   const { user, userData } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<{name: string, price: string} | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handlePlanClick = async (planName: string, price: string) => {
     if (!user) {
-      try {
-        await signInWithGoogle();
-      } catch (error) {
-        console.error("Login failed", error);
-        return;
-      }
+      setIsAuthModalOpen(true);
+      return;
     }
     
     // If they click basic and they are already basic or higher, do nothing or show active
@@ -133,7 +131,7 @@ export const Pricing = () => {
             </div>
           ) : (
             <button 
-              onClick={signInWithGoogle}
+              onClick={() => setIsAuthModalOpen(true)}
               className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-sm border border-slate-200 text-slate-700 hover:text-primary-600 hover:border-primary-200 transition-colors font-medium"
             >
               <LogIn className="w-4 h-4" />
@@ -194,27 +192,35 @@ export const Pricing = () => {
                   ))}
                 </div>
 
-                <button 
-                  onClick={() => handlePlanClick(plan.name, plan.price)}
-                  disabled={currentSelected}
-                  className={`w-full py-4 rounded-xl font-medium transition-colors ${
-                    currentSelected
-                      ? 'bg-primary-50 text-primary-600 border border-primary-200 cursor-default'
+                <div className="space-y-3">
+                  <button 
+                    onClick={() => handlePlanClick(plan.name, plan.price)}
+                    disabled={currentSelected}
+                    className={`w-full py-4 rounded-xl font-medium transition-colors ${
+                      currentSelected
+                        ? 'bg-primary-50 text-primary-600 border border-primary-200 cursor-default'
+                        : active 
+                          ? 'bg-slate-100 text-slate-500 cursor-not-allowed'
+                          : plan.popular 
+                            ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/20' 
+                            : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+                    }`}
+                  >
+                    {currentSelected 
+                      ? 'Active Plan' 
                       : active 
-                        ? 'bg-slate-100 text-slate-500 cursor-not-allowed'
-                        : plan.popular 
-                          ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/20' 
-                          : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
-                  }`}
-                >
-                  {currentSelected 
-                    ? 'Active Plan' 
-                    : active 
-                      ? 'Included in Plan'
-                      : !user 
-                        ? 'Sign in to ' + plan.buttonText
-                        : plan.buttonText}
-                </button>
+                        ? 'Included in Plan'
+                        : !user 
+                          ? 'Sign in to ' + plan.buttonText
+                          : plan.buttonText}
+                  </button>
+                  <Link
+                    to={`/program/${plan.name.toLowerCase()}`}
+                    className="flex w-full items-center justify-center py-4 rounded-xl font-medium transition-colors border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-primary-600"
+                  >
+                    View Program Details
+                  </Link>
+                </div>
               </motion.div>
             );
           })}
@@ -229,6 +235,11 @@ export const Pricing = () => {
           price={selectedPlan.price}
         />
       )}
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </section>
   );
 };

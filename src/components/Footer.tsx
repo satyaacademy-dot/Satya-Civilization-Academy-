@@ -22,10 +22,10 @@ export default function Footer() {
               <a href="#" className="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center text-primary-200 hover:text-white hover:bg-primary-800 transition-colors">
                 <Twitter size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center text-primary-200 hover:text-white hover:bg-primary-800 transition-colors">
+              <a href="https://www.linkedin.com/in/akash-s-853347152/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center text-primary-200 hover:text-white hover:bg-primary-800 transition-colors">
                 <Linkedin size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center text-primary-200 hover:text-white hover:bg-primary-800 transition-colors">
+              <a href="https://www.instagram.com/akash_shivapure?igsh=MWQyNjVzOXhxN3Bscg==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center text-primary-200 hover:text-white hover:bg-primary-800 transition-colors">
                 <Instagram size={18} />
               </a>
             </div>
